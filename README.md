@@ -5,6 +5,11 @@
 - 1 ZH a félév végén
 - előadásonként opcionális kis HF-k amikkel a ZH kiváltható (4 hetes átfutási idő)
 
+- 
+
+## Vizsgakérdések:
+- [smart contract]()
+
 > **Bevezetés**
 >
 > Bitcoin és Ethereum protokollról lesz szó konkrétan, a blokkláncokat ezek mentén nézzük meg. [`Solidity`](https://docs.soliditylang.org/en/v0.7.4/)-ben lesz a programozás. A cél egy [dApp](https://medium.com/@valhallavet/how-to-build-a-dapp-on-vechain-initial-steps-9a3e35c876f2) használatával lefejlesztése.
@@ -65,3 +70,110 @@
 
 #### HF:
 Válassz egy eseményt a bitcoin/blokkánc történetéből és mutasd be 10 sorban. Mi történt, miért izgalmas ez, hogyan befolyásolta a blokklánc adaptációt. 
+
+## EA2
+### a tranzakció menete:
+> egy P2P hálózaton megy át az üzenet. A hálózat akár több ezer csomópontú is, pl ether: https://ethstats.net/. A hálózaton dől el, hogy érvényes-e egy tranzakció. A hálózat nem mondhatja félig azt, hogy igaz félig azt, hogy hamis, mert akkor forkolás van, és a végső igazságállítás nem működik. A forkolás után a hálózat előbb utóbb konszenzusra jut és mindegyik csomópont azt mondja, hogy érvényes vagy azt, hogy érvénytelen.
+> 
+> Ha a tranzakci érvényes, akkor letároljuk egy adsatbázisban. Az adattbázis legalább az összes érvényes tranzakciót tartalmazza, de tarltamazhatja az érvényteleneket is. Az adatbázis mindne egyes csomóponton ott van, tehát a hálózat ennek segítségével jut konszenzusra. 
+
+#### tranzakciós szemantika
+> a bitcoin csk A-ból B-be tud küldeni tranzakciót, de, ha kiegészítjük feltétlekkel, 
+> 
+> pl: *küldjünk A-ból B-be, ha 4 emberből 3 támogatja és Március 3 után vagyunk.* vagy *a tranzakció az, hogy egy orvos felír egy receptet egy betegnek és a hitelesítő hálózat a kórházak rendszere*, vagy *a szállodák szobái a tokenek (coinok) és a transzfer, hogy egyik embertől a másiknak adhatjuk, így a x. szoba holnapi foglalása a token*
+> 
+> A **smart-contract** egy olyan tranzakció ami mögé egy üzleti logika kerül, tehát nem csak valutát küldünk, hanem valami mást is.
+> 
+> A bitcoinnak és a litecoinnak nem igazán van tranzakciós szemantikája, mert ugyan technikailag képes rá, de nem szokás használni az összetettsége miatt, inkább csak coin küldésére szokás használni
+> 
+> Ripple IOU (I own you) szerződéseket ad, ahol a két fél küzütt a tartozást tartja számon, és abból számolja.
+> 
+> A tranzakció programozási nyelev nem egy triviális kérdés, mert ha turing teljes a nyelv akkor végtleen ciklus is lehet benne ami pl egy IOU rendszerben kiszámíthatatlan végeredményt ad.
+
+#### HF: 
+egy egyetem blokkláncosításának alapelvei a fentiek alapján.
+
+#### tranzakciós struktúra
+![blokklánc](https://miro.medium.com/max/1452/1*Wc-YRBsmZcjNsMBSqyYtuA.png)
+
+> Ez az a tranzakciós lista ami minden peerhez be van másolva.
+> 
+> Egy blokkba a tranzakciók vannak lementve. A blokkok egymás után vannak, és minden tranzakció minden egyes blokkba belekerül. Az első blokkban azok a tranzakciók amik reggel, a második amik délben jöttek stb, és ezek alkotják a blokkláncot.
+> 
+> a blokkoknak egy hash függvénnyel generált újlenyomatát elkészítjük és azt tesszük a fejlécébe a következő blokknak. A következő blokkba már az eddiggi hash értéket és az összes új tranzakciót hasheljük össze, és ezzel az értékkel fog kezdődni a következő blokk.
+> 
+> Ahhoz, hogy ne lehessen azt mondani, hogy valaki megtette a tranzakciót egy proof of workot kell felmutatnia. Ez azt is biztosítja, hogya blokkláncból nem lehet törölni!
+> 
+> Az egész működhet máshogy is, pl [iota](https://www.iota.org/), de ezt már nem blokkláncnak hanem elosztott főkönyvi áhlónak nevezzük, ezt mutatja be a tangle: https://explorer.iota.org/mainnet/visualizer/
+> 
+> A másik megoldás a pletykáló hálózatok, a hashgráf, ami másképp de ugynaezt oldja meg, így néz ki:
+> ![pletykáló hálózat](https://1.bp.blogspot.com/-DpZwufJmu_Y/Wh6lGuTNRmI/AAAAAAAABUU/0W2PLj5w-j4ql9RE8Otwk5DrB3UcgKOGQCLcBGAs/s1600/hashgraph%2B%25282%2529.gif)
+
+#### tranzakciós rendszerek
+> - szemi publikus: nyilvános, bárki indíthat tranzakciót, de a küldő nem ismert
+> - konzorciumi rendszer: nem nyilvános, pl: [Hyperledger Fabric](https://www.hyperledger.org/use/fabric), a tranzakció végeredménye viszont nem titkosított, de az egész felügyelt.
+
+#### network scpope - consortium
+> a P2P hálózat ellekezője, ahol ismert szeretplők vannak a rendszerben, mindneki tudja hol futnak midnkei más csomópontjai, mindkei szavaz a másik blokkjára, tranzakciójára. Ehhez nem lehet úgy csatlakozni, ha csak te szeretnél, ide minden résztvevő engedélye kell
+> - lehet nyilvános
+> - lehet privát
+> - lehet konzorciumi
+>
+> ![tranzakciós típusok](https://miro.medium.com/max/1156/1*pGQc5gy-T8VRQq57DjwG3A.png)
+> 
+> - bitcoin,. litecoin: pub, pub
+> - nyilvános blokkláncra stmart contract: pub, consort
+> - libra: consort, pub
+> 
+> *Saját, csak belső kripto értlemére példa*: bizánci hibatűrés: van egy szolgáltatási rendszer, amiből ha kiesik sozlgáltatás, mert meghackelték, akkor is sértetlen a szolgáltatás. Ehhez visoznt egy saját elosztott adatbázis alkalmasabb lehet
+
+#### konszenzus algoritmus
+**Fontos szempontok**
+- hibatűrés
+- bizánci hiba tűrése
+- algoritmus hatékonysága
+- tranzakciók feldolgozási száma/időegység
+
+P2P hálózat esetén ([bitcoin](https://bitnodes.io/?The), [Ether](https://etherscan.io/nodetracker)) 
+
+- **Quorum**: minimuum sázmú ember azonos vélmeényre jut
+- **Nakamoto**: véletlenszerűen választunk bányászt aki dönt
+- [**Proof of stake**](https://en.wikipedia.org/wiki/Proof_of_stake)
+
+#### token alapú kriptogazdaság
+- a tranzakciós díj attól függ, hogy mekkora a tranzakió (BTC: a fizikai méret, ETH: mennyi ideig futott a tranzakció)
+
+A decentralizált hálózatban vannak emberek akik a tranzakciót kérik és a bányászok akik a tranzakciós díjat kapják - Azért nem lehet DDosolni a hálózatot, mert a rendszerbe beépített tranzakciós díj mértéke egyenesen arányos a támadás méretével, így a támadás kivitlezése nagyon drága. Mndezt egy centralizált rendszer, egy conzorciumio rendszer nem kell tartalmazza.
+
+Minden nyilvános blokklánc projekt árazódik a tőzsdén: https://coinmarketcap.com/
+
+#### Az eddigiek összehasonlítása
+![comapare](https://www.prolitus.com/blog/ethereum-vs-bitcoin/)
+- Bitcoin: fentebb tárgyalva
+- Ethereum: fentebb tárgyalva
+- hyperledger
+  - több nyelven kezelhető
+  - nincsennek a csomópontok szétszórva
+  - kimagasló telesítmény
+  - alacsonyabb hibatűrés, mivel zárt
+  - kriptoközgazdasági rendszere nincs, mivel adott cégek működésére van építve
+
+#### Kriptovaluták összehasonlítása
+- Binance Coin: egy átváltó kriptovaluta, pl: erre váált aki btcből ethba akar váltani
+- Tether: egy stabil, centralizált, szingapúrból vezetett kriptovaluta, egy az gybe vált dollárba: 1usdt = 1usdollar, veszélyes lehet a a teljes piacra nézve
+- Cardano: smart contractra képes 
+- XRP (ripple): egy consortiumi blokklánc tokenje
+- litecoin: bitcoin2, a btc protokolljára épül, és azt fejlesztik tovább
+- chainlink: decentralizált oraculum, ennek a tokenje
+- bitcoin cash: a btc egy forkja, ami más méretben dolgozik, de végülis a btc algoritmusán
+- stellar
+- usd Coin: szintén a dolárral áll paritásban
+- dogecoin: egy trollkodásnak indult
+- wrapped bitcoin: ether hálózaton smart contractba csomagolt bitcoin, aminek az az értelme, hogy bitcoinra alklamaz smart contractot amire meg az ether képes
+- uniswap: etherre alkalmazott smart contreactban megvalósítanak alkalmazást, decentralizált exchange, aminek a tokenje külön árazódik
+- EOS: nyilvános de centralizált hálózat smart contractokra, `C++`-ban programozható
+- Cosmos: blokkláncok öszekötésére allalmas
+- monero: a titkosítást tartja szem előtt
+- tezos: általános blokklánc fejlesztési platform ahol smart contractok is működnek
+
+**HF:** maiak alapján a tranzakciós szemantikák, smart contract, stb-t átgondolva milyne leheetőség lenne egy oktatási folymat blokkláncosítására? Mit érdmees átgonodlni, a hálózat nyiltságát infrastrukturálisan, tranzakciós szmepontból átgondolva, egy 10 soros öteltelés.
