@@ -5,14 +5,16 @@
 - 1 ZH a félév végén
 - előadásonként opcionális kis HF-k amikkel a ZH kiváltható (4 hetes átfutási idő)
 
-- 
+**Ajánlott irodalom:**
+- Bitcoin Standard - A központi bankok decentralizált alternatívája - Saifedean Ammous
+
 
 ## Vizsgakérdések:
 - [smart contract]()
 
 > **Bevezetés**
 >
-> Bitcoin és Ethereum protokollról lesz szó konkrétan, a blokkláncokat ezek mentén nézzük meg. [`Solidity`](https://docs.soliditylang.org/en/v0.7.4/)-ben lesz a programozás. A cél egy [dApp](https://medium.com/@valhallavet/how-to-build-a-dapp-on-vechain-initial-steps-9a3e35c876f2) használatával lefejlesztése.
+> Bitcoin és Ethereum protokollról lesz szó konkrétan, a blokkláncokat ezek mentén nézzük meg. [`Solidity`](https://docs.soliditylang.org/en/v0.7.4/)-ben lesz a programozás. A cél [dApp](https://medium.com/@valhallavet/how-to-build-a-dapp-on-vechain-initial-steps-9a3e35c876f2) technológia használatával lefejlesztése.
 >
 > Ez egy technológiai szemszögből vett kurzus, [nem fogunk a bitcoin árfolyammal](https://www.coinbase.com/price/bitcoin) foglalkozni, az [mások](https://cryptofalka.hu/) dolga. A [centralizált kriptovalutákkal](https://en.wikipedia.org/wiki/Central_bank_digital_currency) sem fogunk foglalkozni. És a [Bitcoin gazdasági vonzataival sem foglalkozunk](https://www.researchgate.net/publication/340439882_Bitcoin_digitalis_szemfenyvesztes_vagy_a_jovo_valutaja. 
 >
@@ -148,7 +150,7 @@ A decentralizált hálózatban vannak emberek akik a tranzakciót kérik és a b
 Minden nyilvános blokklánc projekt árazódik a tőzsdén: https://coinmarketcap.com/
 
 #### Az eddigiek összehasonlítása
-![comapare](https://www.prolitus.com/blog/ethereum-vs-bitcoin/)
+![comapare](https://www.prolitus.com/wp-content/uploads/2017/07/Ethereum-Vs.-Bitcoin-Which-is-Better-Cryptocurrency-1.jpg)
 - Bitcoin: fentebb tárgyalva
 - Ethereum: fentebb tárgyalva
 - hyperledger
@@ -177,3 +179,10 @@ Minden nyilvános blokklánc projekt árazódik a tőzsdén: https://coinmarketc
 - tezos: általános blokklánc fejlesztési platform ahol smart contractok is működnek
 
 **HF:** maiak alapján a tranzakciós szemantikák, smart contract, stb-t átgondolva milyne leheetőség lenne egy oktatási folymat blokkláncosítására? Mit érdmees átgonodlni, a hálózat nyiltságát infrastrukturálisan, tranzakciós szmepontból átgondolva, egy 10 soros öteltelés.
+
+**Érdekes lehet még:**
+- digitális euro https://www.ecb.europa.eu/euro/html/digitaleuro.en.html
+- chainalysis: https://www.chainalysis.com/
+- THE CRYPTO PESO: https://eosvenezuela.io/cryptopeso.html
+- Decentralized finance: https://en.wikipedia.org/wiki/Decentralized_finance
+- 
