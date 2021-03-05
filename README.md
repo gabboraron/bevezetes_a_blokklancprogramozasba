@@ -43,7 +43,7 @@
 > Erre megoldás a decentralizált, **elosztott főkönyv**. Ez a technológia akkor is működhet, ha maga a kriptovaluta már nem létezik majd, hiszen a streaming szolgáltatók is technológiailag a torrenten alapszanak.
 > - a blokklánc nem új technológia, csak régi technológiák új fajta összegyúrása, *distrupting innovation*
 > 
-> *HF:* 15 angol szakmai kifejezés magyar fordítása, pl *distrupting innovation* (pl: ford T model, személyi számítógép, wikipedia, okostelefon), 5let: *felforgató újítás*, *infrastructure inversion*, *open permissionless network*, *[distributed ledger technology](https://searchcio.techtarget.com/definition/distributed-ledger#:~:text=Distributed%20ledger%20technology%20(DLT)%20is,data%20store%20or%20administration%20functionality.)* 
+> *HF:* 15 angol szakmai kifejezés magyar fordítása, pl *distrupting innovation* (pl: ford T model, személyi számítógép, wikipedia, okostelefon), 5let: *felforgató újítás*, *infrastructure inversion*, *open permissionless network*, *[distributed ledger technology](https://searchcio.techtarget.com/definition/distributed-ledger#:~:text=Distributed%20ledger%20technology%20(DLT)%20is,data%20store%20or%20administration%20functionality.)*, assignment, milestone, decentralized finance
 > 
 > A [decentralized finance](https://en.wikipedia.org/wiki/Decentralized_finance) egy nem teljesen szabályzott, de működő banki módszert visz fel a kripto technológiákra.
 >
@@ -185,4 +185,86 @@ Minden nyilvános blokklánc projekt árazódik a tőzsdén: https://coinmarketc
 - chainalysis: https://www.chainalysis.com/
 - THE CRYPTO PESO: https://eosvenezuela.io/cryptopeso.html
 - Decentralized finance: https://en.wikipedia.org/wiki/Decentralized_finance
-- 
+
+## EA3
+
+
+## EA4
+- [defiicon](https://www.eventbrite.com/e/defiicon-the-defi-conference-tickets-133902246223)
+- [European Blockchain Service Infrastructure (EBSI) Introduction](https://www.meetup.com/Hyperledger-Budapest/events/276348248/)
+
+### Kriptográfia
+> Titkosított üzenet küldés
+> - steganográfia: üzenet elrejtése *(pl fizikailag elrejtjük, mondjuk mikrofilmet fülbevalóba)*
+> - kriptográfa: üzenet kódolása *(karakterekt kódolunk valamilyen módszerrel)*
+>   - cézár kód: https://cryptii.com/
+> 
+> szimetrikus kriptográfia: egy kulcs van, amivel kódolunk ésdekódolunk, előtte a kulcsban meg kell egyeznie a két félnek
+> 
+> asszimetrikus kriptográfia: két kulcsa van mindkét beszélgető félnek, egy nyilvános, és egy privát. Alice a szöveget Bob nyilvános kulcsával kódolja el, és azt Bob csak a saját, privát kulcsával tudja dekódolni Ez nem gyors folyamat, ezért ezt csak a szimetrikus kriptográfiához használt kulcs cseréez használják,
+> 
+> https://cryptoclub.org/
+
+#### Digitális aláírás
+> blokkláncon küldün egy szöveget, pl: *én küldök neked 10 érmét* akkor azt alá kell írni, úgy, hogy az más előtt is elfogadható legyen
+> 
+> Alice aláírása Alice és Bob között Alice nyilvános kulcsával ellenőrizhető.
+> 
+> ![nyilvános és titkos kulcs használata aláíráshoz](https://www.4point.com/content/dam/4Point/Blog%202017/pic%203_digital%20signature%20process_4Point.png)
+> 
+> **Hekkelhető-e?**
+> 
+> *Alice küld Bobnak 5 BTC ~ aláírva Alice által* szöveget átírjuk *Alice küld Evenek 5 BTC ~ aláírva Alice által* Erre megoldás az eredeti üzenet hashelése és a hashelt érték aláírása.
+
+Ha van egy adattárház akkor az ott tárolt adatunkat hogyan titkosíthatjuk? A [Numerai](https://numer.ai/) használatával gépi tanulás algoritmusokat használhatunk úgy hogy közben az adatok maguk anonimok és titkosítottak maradnak. 
+
+[Zero-knowledge proof](https://en.wikipedia.org/wiki/Zero-knowledge_proof) használatával finomhangulhatjuk a kriptovaluta biztonsági/titkossági részét.
+
+Kérdés, hogy mennyit ér a a nagy biztosnág, ha közben magukat a kulcsokat el lehet lopni a személyektől.
+
+#### Kriptovaluta
+##### Kulcsok és címek
+- bármit teszünk a blokkláncon azt a kulcsokkal tesszük, mert ahhoz vannak hozzárendelve az értékek.
+- A rendszerben a "személyhez" ~ kulcshoz társítjuk az értékeket *, pl XXX - 5 ETH | XYZ - 3 ETH*. Egy címhez tartozik egy nyilvános és egy privát kulcs. Ezekkel írjuk alá a tranzakciókat. Ennek a felépítése más mint egy szokásos szolgáltatásnak, mert itt kulcsokat kezelünk.
+- ha töröljük a pénztárcát, backup nélkül akkor elvesztjük a pénzt
+- ha a kulcsokat valaki ellopja akkor sizntén elveszett a pénz
+
+Amikor nyilvános kulcsú kriptográfiáróll van szó akkor a nyilvános kulcsot generáljuk. Ha a generátor nem elég jó *(pl egy lambda fv)* akkor ezek megjósolható kulcsok. Így a kulcsok száma redukálható, tehát könyebben hackelhető a kulcs maga. 
+
+> - Maga a titkos kulcs egy 256 bites titkos random szám.
+> - ha olyan kulcsot generálunk amire tudunk emlékezni az a [brain wallet](https://en.bitcoin.it/wiki/Brainwallet#:~:text=A%20brainwallet%20refers%20to%20the,by%20memorizing%20a%20seed%20phrase.&text=To%20create%20a%20brainwallet%2C%20use,like%20Electrum%2C%20Armory%20and%20Mycelium.) ami bizonyítottan nem biztonságos.
+> - [ECC](https://avinetworks.com/glossary/elliptic-curve-cryptography/#:~:text=Elliptic%20Curve%20Cryptography%20(ECC)%20is,Adleman%20(RSA)%20cryptographic%20algorithm.): elliptikus görbén van egy fix pontom, ez előrehaladott, *A*-pont, van egy titkos kulcsom, *k*, és a *nyilvános kulcs: `k*a`*
+>   - *két pont összeadása:* húzok egy egyenest a görbére aminek a görbével vett metszéspontjai szimetrikusan értelmezettek
+>   - *két pont szorzása:* ha van egy pontom a görbén (*A*) akkor a *2A* az a pont *x* tengelyre való tükrözésével kapjuk meg.
+> ![ecc vázlat](https://avinetworks.com/wp-content/uploads/2020/02/elliptic-curve-cryptography-diagram.png) ![ecc műveletek](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/ECClines.svg/1920px-ECClines.svg.png)
+> 
+> ha van egy privát kulcsom amiből előáll a nyilvános kulcs akkor a generálás maga gyorsan kell történjen, a visszafejtésnek lassúnak kell lennie, *nem gondolva a quantum számítógépekre*
+> 
+> Egy BTC címnél van checksum, tehát ha nem mindne lehetséges cím (*elírás*) lehet cím, ésa cím Base58-ra van alakítva. Minden egyes tranzakcióra új kulcspár jön létre! Tehát, a coinhoz tartozik a kulcspár. Tehát, a titkosságot és a quantumrezisztenciát növelve, amikor költök BTC-t akkor az utalás után egy újonnan generált cím jön létre amit visszaad a rendszer. Anonimabb mint az ETH.
+> 
+> ETH-ban egy tetszőleges cím egy lehetséges cím, csak nincs hozzá titkos kulcsod. ETH-ban fiók van amihhez tartozik egy-egy kulcspár és a fiókhoz az utalások.
+
+### Walletek
+> Ezek gyakorlatilag digitális kulcstartók, mert kulcsokat tárolunk bennük. BTC-nél minden tranzakciónál, ETH-nál meg a fiókhoz. 
+> 
+> A **wallet as a service**, *pl web wallet* benn van valamilyen céges környezetben, webes felületen férhetsz hozzá, de ha gond vana céges adattárházban az nálad is jelentkezik.
+>
+> Az **app és dekstop wallet**eknél a fájlokban tárolódik az információ, ha nem készül backup és tönkremegy/ellopják az eszköz(t) akkor a kulcsok is elvesznek!
+>
+> **Hardware wallet**, egy [usbs eszköz](https://www.ledger.com/) ami aláírja a tranzakcióinkat, a desktop programon keresztül.
+> 
+> **paper wallet** a privátból egy publikus kulcs generálódik amiből egy címet generálok. Ezt a címet adom meg, amikor offline vagyok a hálózaton, de a címre lehet utalni, és a hozzá tartozó kulcsokkal lehet  hozzáférni a rajta levő coinhoz. 
+> ![paper wallet](https://upload.wikimedia.org/wikipedia/commons/d/db/Bitcoin_paper_wallet_generated_at_bitaddress.jpg) 
+> 
+> generátor: https://bitcoinpaperwallet.com/bitcoinpaperwallet/generate-wallet.html
+> - generárlunk egy kulcsot
+> - átmásoljuk olyan gépre amit még nem ért internet
+> - és azon generáljuk át
+> 
+> **determinisztikus wallet** egy seedből generálódnak a kulcsok, a seed maga véletlenszerű, de azt visoznt le kell menteni, ahhoz, hogy további kulcsokat gneeráljunk. A véletlen kulcsból való generálás mindig determinisztikus lesz.
+> 
+> [**hd wallet**](https://medium.com/@harshagoli/hd-wallets-explained-from-high-level-to-nuts-and-bolts-9a41545f5b0) - hierarchikus és determinisztikus, amikor egy seed kulcsot használunk, de az ezekből generált determinisztikus kulcsokból újabb kulcspárokat generálunk és azt használjuk. Ezt akár még többször ismételhetjük. A közbenső kulcsokat nem használjuk aláírásra, csak átmenetre. Ez cégek számára is alkalmas lehet.   
+> 
+> ![hd w](https://miro.medium.com/max/3000/1*wa3Wknzgr6nS8ZrQQf2N6g.png)
+> 
+> 
