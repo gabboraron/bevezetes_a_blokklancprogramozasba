@@ -69,6 +69,7 @@
    - [Ethereum foundation indulása](https://www.bitcoinsuisse.com/staking/ethereum-2), [Vitalik Buterin](https://www.bitcoinbazis.hu/utmutato/ethereum-letrehozo-vitalik-buterin/) alapításával
 - **2015** [hyperledger fabric](https://www.hyperledger.org/use/fabric) egy konzorciumi felhasználása a kriptovalutáknak
 - **2015-2018** [Inition Coin Of rings hype](https://www.forbes.com/sites/forbescommunicationscouncil/2019/01/02/marketing-was-a-driving-force-in-the-ico-hype-and-crypto-crash-and-may-lead-its-rebirth/), ami azt vázolta, hogy létrehoznak egy blokklánc tokent, ami akár egy ötleet fed és eladjuk sok pénzért amivel a projektet lehet pénzelni. Ez azért ment csődbe, mert sokan visszaéltek vele, hogy eladták a tokent de nem volt mögötte valós projekt. Ezt később erősen leszabályozták, ami akár a céges részesedést is jelntette.
+- **2018** nagy kriptovaluta válság
 
 #### HF:
 Válassz egy eseményt a bitcoin/blokkánc történetéből és mutasd be 10 sorban. Mi történt, miért izgalmas ez, hogyan befolyásolta a blokklánc adaptációt. 
@@ -187,11 +188,40 @@ Minden nyilvános blokklánc projekt árazódik a tőzsdén: https://coinmarketc
 - Decentralized finance: https://en.wikipedia.org/wiki/Decentralized_finance
 
 ## EA3
+> **Ismétlés**
+> - van egy nyilvános kulcsú kriptográfai amivel aláírunk egy tranzakciót
+> - a trnzakció bármi lehet, valamilyen érték küldés (üzenet, vagy más)
+> - egy hálózatra küldüjük a tranzakciót, a P2P hálózat konszenzusra jut
+> - egy tranzakciós adatbázisba betesszük az egészet.
 
+### ETH metamask wallet
+https://metamask.io/ feltölthető közvetlen https://www.sendwyre.com/ -el
+- egy digitális pénztárca, arra szolgál, hogy az ethereum  hálózattal komunikáljunk
+- főleg ether tárolására és küldésére szolgál
+- a legtöbb wallet web3 UX-en működik, ezért a végfelhasználóknak ez kényelmetlen lehet mert web2-höz szoktak
+- amit a wallet tárol azok igazából titkos kulcsok
+- egy walletben több kulcs is van, van egy alap alap, root, mnemonic kulcsból generálódnak a későbbi kulcsaim
+- tehát ha a kulcsokat elhagyom/ellopják akkor elvesztem a tárolt pénzem
+- minden egyes wallethez generálódik egy nyilvános és egy titkos kulcs. A nyilvános kulcs olyan mintha sázmlaszám lenne, ez az `Account` menüpont.
+- a titkos kulcs az  `Account`-hoz tartozó fiókadatoknál megtekinthető
+
+**Hálózatok:**
+- ethereum main net: fő ether hálózat, ezen élesben történnek a tranzakciók
+- ropsten test net: ez áll a legközelebb az ether működéséhez, és ezért érdemes ezen tesztelni, erre a [faucet](https://faucet.ropsten.be/) szolgál, ami ad teszt ethert.
+- az ether [block chain explorere az etherscan](https://etherscan.io/) it lehet látni a tranzakciót és hogy azzal mi történik a blokkláncon
+- pl: https://ropsten.etherscan.io/tx/0xae3db350dc133063d8c1b17c22f5aff107ae6ba6f1503293b555675875ca63d8
+  - itt van egy `Transaction Hash` ami egy egyedi azonosító, itt minden adata a tranzakciónak egybe van hashelve
+  - `Status`: mi történik a tranzakcióval
+  - `Block`: hogy melyik blokkban an benne a tranzakció és a `lock Confirmations` ami azt jelzi hány megerősítés van a blokk után, minnél több annál valósínűbb, hogy elfogadható
+  - `Timestamp`: ez egy körübelüli idő, mert a legtöbb blokklánc nem tartalmaz globális órát, maga a blokklánc az óra, így ezzel pontosan nem lehet számolni
+  - `From` és `To` az hogy honnan hova küldték az összeget, a nyilvános kulcsok, maguk a címek kezdőértékei megadják, hogy melyik hálózaton mozognak: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids
+  - `tranzakciós díj` a tranzakció fizikai méretétől függ és nem a tranzakció értékétől függ!
+  - tranzakciókor a tranzakció feldolgozása után a küldő nyilvános címén változik az állásé a pénztárca csak azt kérdezi le, nem változtat magán az értéken!
 
 ## EA4
 - [defiicon](https://www.eventbrite.com/e/defiicon-the-defi-conference-tickets-133902246223)
 - [European Blockchain Service Infrastructure (EBSI) Introduction](https://www.meetup.com/Hyperledger-Budapest/events/276348248/)
+- [@blockchainbudapest](https://medium.com/@blockchainbudapest)
 
 ### Kriptográfia
 > Titkosított üzenet küldés
