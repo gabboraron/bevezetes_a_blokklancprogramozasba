@@ -296,5 +296,104 @@ Amikor nyilvános kulcsú kriptográfiáróll van szó akkor a nyilvános kulcso
 > [**hd wallet**](https://medium.com/@harshagoli/hd-wallets-explained-from-high-level-to-nuts-and-bolts-9a41545f5b0) - hierarchikus és determinisztikus, amikor egy seed kulcsot használunk, de az ezekből generált determinisztikus kulcsokból újabb kulcspárokat generálunk és azt használjuk. Ezt akár még többször ismételhetjük. A közbenső kulcsokat nem használjuk aláírásra, csak átmenetre. Ez cégek számára is alkalmas lehet.   
 > 
 > ![hd w](https://miro.medium.com/max/3000/1*wa3Wknzgr6nS8ZrQQf2N6g.png)
+
+## EA5
+**utalás fajták**
+
+Két féle kriptovaluta van, az egyik a coin rendszer, mint a bitcoin, hogy gyakorlatilag érméket osztunk fel és/vagy küldözgetünk, nem is feltétlen emberek között, de tárcák között. Mindkét esemény egy-egy tranzakció. A tranzakciót mindig az láírásunkkal hitelesítjük, így a bitcoinok felosztását is hitelesítenünk kell.
+
+Másik irányból viszont van egy tárcám amiben van egy két bitcoinos érme és egy három bitcoinos érme, ami ugyanzon a pénztárcán van, de külön címen. Pl, 2BTC az egyik címen, 3 a másikon és összevonjuk egy harmadik címre, ahol 5 BTC lesz, de mindegyikhez lesz külön egy-egy titkos kulcs.
+
+Hasonló lehet az is ha pl egyik címen 1BTC-t másikon 4 BTC-t vonnánk össze egy címre 2 BTC-t, másik címre 3 BTC-t.
+
+UTxO rendszer segíti a BTC-t hogy anonimitást adjon, hogy amikor maradék pénz kereletkezne az utalásból azt egy harmadik címre küldi, hogy kevésbé legyen visszakereshető
+
+> **Tranzakciós díj**
 > 
+>Pl: van 2 BT amit el kaarunk költeni egy 0.9 BTC-be és egy 1BTC-sem akkor a 0.1BTC a tranzakciós díj, amit a bányász kap.
 > 
+> A tranzakció végén akár 0 is lehet a tranzakciós díj, de annak meghatározása a tranzakciót megkezdő félnél van, ő határozza meg, erre a tárcák javaslatokat adnak.
+> 
+> A bányász látja, hogy mekkora a tranzakcíó díja, és a nagyobb díjakkal kezdik a blokkok feltöltését, majd az alacsonyabbak kezdenek, és végül, ha van hely akár a 0 díjú is átmehet a hálózaton
+> 
+> számolása: `sum(input)-sum(output)`
+> 
+> ![tranzakciós gráf](https://dist.neo4j.com/wp-content/uploads/20180109030108/neo4j-bitcoin.png)
+>
+> A tranzakciós díj függ tranzakció méretétől, amit bytera konvertálunk és ahhoz viszonyítva adjuk meg a tranzakciós díjat.
+> 
+> A tranzakciós díj nagysága alapján hamarabb vagy később kerül feldolgozásra a tranzakció maga. A tranzakcisó díjat a tranzakciós statisztikák alapján érdemes megadni, hogy gyorsabb legyen a tranzakió. https://bitinfocharts.com/comparison/bitcoin-transactionfees.html
+
+Minden egyes tranzakcís coin maga az leőtő tranzakció maradéka, ez maga az [UTXO - Unspent transaction output](https://en.wikipedia.org/wiki/Unspent_transaction_output)
+
+![raw transaction](https://miro.medium.com/max/1250/1*oFl5V471MunuwG2Bv_-Eyg.png)
+
+### BTC és multicoin walletek
+pl: [bitpay](https://github.com/bitpay/wallet)
+
+Minden egyes csomópontnak van egy memory poolja amibe az érvényes de még fel nem dolgozott tranzakciók jönnek. Ez az unconformed balance.
+
+BTC testnet faucet: https://testnet-faucet.mempool.co/
+
+A titkos kulcs 256 bit abból lesz a nyilvános kulcs és abból a cím amit még el is hashelünk, így bármelyik cím érvényes, akkor is ha nem generáljuk le!
+
+van oylan wallet ami a blokk headereket is tárol, van amelyik a blokklánc egy részét, van ami egyiket sem belőle.
+
+### Script - bitcoin programozás
+> irodalmak: 
+> - https://www.bitcoin-studio.com/assets/education/bitcoin_script_bitcoin-studio.pdf
+> - https://davidederosa.com/basic-blockchain-programming/bitcoin-script-language-part-two/
+> - https://medium.com/@ismailakkila/my-notes-on-bitcoin-transactions-part-1-a4edc871f705
+>
+>
+> - fortran szerű
+> - nem turing teljes
+> - stack alapú
+>
+> ![script program](https://miro.medium.com/max/875/1*NQvOvhIHxYGu5tJRGBxehg.png)
+>
+> A tranzakcióhoz tartozik egy `lock` és egy `unlock` script, amiben a tranzakció aláírására várunk és az aláírás után továbblpünk. Az `unlock` gyakorlatilag a címzett aláírását és a nyilvános kulcsát szedi egybe.
+>
+> - **p2pkh**: https://learnmeabitcoin.com/technical/p2pkh
+> - **P2PA**: kevésbé quantumbiztonságos ezért már nincs használatban
+>
+> #### Multisignature - `OP_CHECKMULTISIG`
+> figyeli a küldő és fogadó autorizációját
+> 
+> #### data recording
+> A BTC alpvetően nem erre való, de ha szeretnénk valamit biztonságosan küldeni akkor arra van lehetőség, nem túl nagy méretekben, ez nem egy smart contract rendszer, tehát erre nehéz alapozni!
+>
+> #### timelock
+> Megadható, hogy mikortól kezdődjön a tranzakció maga.
+
+### bitcoin P2P hálózat
+https://bitnodes.io/
+
+**szerepkörök**
+- vannak olyan csomópontok amik a teljes blokkláncot tárolják
+- van ami bányászik
+- van ami csak routing csomópont ami érkező tranzakciókat és blokkokat irányítanak
+- full node: tárolja a blokkláncot és routingot is végez
+
+![btc protocols](https://makersu.gitbooks.io/mastering-bitcoin-core/content/assets/mbc2_0803.png)
+
+https://makersu.gitbooks.io/mastering-bitcoin-core/content/the-bitcoin-network.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
