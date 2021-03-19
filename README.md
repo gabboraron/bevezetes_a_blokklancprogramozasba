@@ -22,9 +22,11 @@
 >
 > - [Mastering Bitcoin 2. kiadás](https://github.com/bitcoinbook/bitcoinbook)
 >   - [magyarul 1. kaidás](https://bitcoinbook.info/wp-content/translations/hu/book.pdf), [fájl fletöltve ebbe a repoba](https://github.com/gabboraron/bevezetes_a_blokklancprogramoasba/blob/main/bitcoin_fejlesztoknek.pdf)
+>   - https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch08.html
 > - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)
 > - [egyéb](https://openoms.gitbook.io/bitcoinmagyarul/programozas)
 > - grafikák: https://cryptographics.info/
+> - https://academy.binance.com/en
 >
 > **Fejlesztő környezetek**
 > - [remix](http://remix.ethereum.org/#optimize=false&runs=200&evmVersion=null)
@@ -436,12 +438,41 @@ Bitcoin monetáris politikája: hány darab bitcoin van forgásban és hosszút�
 
 **cryptográfiai játék**
 - a blokk nonce értékéből sé a blokk sha 256-os hash értékénél kisebb számot kell megadnunk. A bizonyos szám, a nehézség maga. Ezek szerint a `nonce` paramétert a blokk hash ével összehashelve ennél a nehézségnél kisebb értéket kell megadnnunk. Ezt lehet tetszőleges nehézséggel megadni, mert a `bizonyos szám` az szabadon megadható.
-- a `nehézség` igazából a hash érték legelején lévő számjegyeket adja meg.
+- a `nehézség` igazából a hash érték legelején lévő 0 számjegyek darabszámát adja meg.
+- a nehézség egy növekvő érték, ami a kezdő nehézség és az azóta elért nehézség függvénye: `init target/actual_target`
+
 ![nehézség](https://cryptographics.info/wp-content/uploads/2018/01/resized/1224/0/65/0/0/0/Proof-of-Work.png?1616162655363)
 
+Ha nő, a bányászási kapacitás azt a rendszer érzékeli, és ahhoz igazítja a bányászás sebességét, ezt a nehézség növelésével vagy csökkentésével lehet elérni. a `Hash rate` a teljes rendszer mérő száma, ami a teljes rendszerre mondja meg, hogy kb ány hash érétket kell kibányászni amíg egy lehetséges jó értéket kapunk. Ez az értéke egy-egy bányász gépeknek is van, ez alapján jósolható meg, hogy mekkora esélye van nyerni a játékban.
 
+> **Tehát a bányászás maga az a folymat amikor a `nonce` értéket 0 -tól addig tekerjük, amíg elérjük, hogy az adattal vett hash értéke kevesebb `0`-val kezdődjön mint a megadott nehézség.**
 
+kipróbálható: https://andersbrownworth.com/blockchain/block
 
+Abban az esetben, ha a bányászok többen egyszerre ugyanarra jutnak, akkor elkezdik a hálózaton terjeszteni az eredményüket, és ez után, azt tartjuk érvényesnek amelyik lánc hosszabb lesz: 
+
+![kezdet](https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0803.png.jpg)![blokkba szervezés](https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0804.png)![lánc növelés](https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0805.png.jpg)![elfogadá](https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/images/msbt_0806.png)
+
+> Ezért a nagy hátránya a rendszernek az energia ígénye, hiszen a szükséges többszörösét kell kiszámolja, ez a rendszer önigaziolása és a [sybil](https://academy.binance.com/en/articles/sybil-attacks-explained) támadás elleni védelem is.
+> 
+> ![sybil attack](https://image.slidesharecdn.com/presentationkishorbench-181117174656/95/classification-of-blockchain-vulnerability-6-638.jpg?cb=1546601507)
+> 
+> Erre lehet megoldás a proof of stake:
+> 
+> ![proof of work vs stake](https://static.blockgeeks.com/wp-content/uploads/2019/05/proofofworkvsproofofstake-1.jpg)
+>
+> A double spending hackelés ellen viszont csak a hálózat mérete véd. Azaz, ha a hálózat  számítási kapacitásának 51%-val egyenértékű sázmítással elkezdünk hamis láncot beadni.
+> 
+> ![double spending](https://cdn.publish0x.com/prod/fs/images/9833e1dbb461a1cb66f20f50f3c0f0ccdfe6929fb9803951b4a9911c7ad1378e.png)
+> 
+
+### Forkolás
+#### soft fork
+a hálózat szoftverfrissíése esetén, ha nem a teljes hálózat frissül és a szoft lehetővé teszi, hogy backward kompatibilis legyen, akkor a régiből az újba van átjárás, fordítva viszont nem, mert a régi hálózat nem tudja mit kap, és érvénytelen blokknak kezeli.
+#### hard fork
+ha nem kompatbilis módon updatelünk akkor két külön hálózat keletkezik, ahol végleges a szétválás.
+
+![bitcoin forkok](https://i.redd.it/1pvmr98w5x041.png)
 
 
 
