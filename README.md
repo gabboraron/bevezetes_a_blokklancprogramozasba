@@ -23,7 +23,8 @@
 > - [Mastering Bitcoin 2. kiadás](https://github.com/bitcoinbook/bitcoinbook)
 >   - [magyarul 1. kaidás](https://bitcoinbook.info/wp-content/translations/hu/book.pdf), [fájl fletöltve ebbe a repoba](https://github.com/gabboraron/bevezetes_a_blokklancprogramoasba/blob/main/bitcoin_fejlesztoknek.pdf)
 > - [Mastering Ethereum](https://github.com/ethereumbook/ethereumbook)
-> [egyéb](https://openoms.gitbook.io/bitcoinmagyarul/programozas)
+> - [egyéb](https://openoms.gitbook.io/bitcoinmagyarul/programozas)
+> - grafikák: https://cryptographics.info/
 >
 > **Fejlesztő környezetek**
 > - [remix](http://remix.ethereum.org/#optimize=false&runs=200&evmVersion=null)
@@ -253,6 +254,8 @@ Ha van egy adattárház akkor az ott tárolt adatunkat hogyan titkosíthatjuk? A
 Kérdés, hogy mennyit ér a a nagy biztosnág, ha közben magukat a kulcsokat el lehet lopni a személyektől.
 
 #### Kriptovaluta
+![blockchain](https://cryptographics.info/wp-content/uploads/2018/01/resized/1920/365/65/0/sharpen/0/0/Running-the-network.png)
+
 ##### Kulcsok és címek
 - bármit teszünk a blokkláncon azt a kulcsokkal tesszük, mert ahhoz vannak hozzárendelve az értékek.
 - A rendszerben a "személyhez" ~ kulcshoz társítjuk az értékeket *, pl XXX - 5 ETH | XYZ - 3 ETH*. Egy címhez tartozik egy nyilvános és egy privát kulcs. Ezekkel írjuk alá a tranzakciókat. Ennek a felépítése más mint egy szokásos szolgáltatásnak, mert itt kulcsokat kezelünk.
@@ -344,8 +347,9 @@ van oylan wallet ami a blokk headereket is tárol, van amelyik a blokklánc egy 
 > - https://www.bitcoin-studio.com/assets/education/bitcoin_script_bitcoin-studio.pdf
 > - https://davidederosa.com/basic-blockchain-programming/bitcoin-script-language-part-two/
 > - https://medium.com/@ismailakkila/my-notes-on-bitcoin-transactions-part-1-a4edc871f705
+> - https://blockgeeks.com/guides/best-bitcoin-script-guide/
 >
->
+> A nyelvről:
 > - fortran szerű
 > - nem turing teljes
 > - stack alapú
@@ -379,17 +383,61 @@ https://bitnodes.io/
 
 https://makersu.gitbooks.io/mastering-bitcoin-core/content/the-bitcoin-network.html
 
+## EA 6
+**blokk felépítése:**
+- header, metaadaatok:
+  - verziószám
+  - előző blokk hash értéke
+- tranzakciók listája
+  - minden blokk legelső tranzakciója: Coinbase tranzakció
+  - több ezer tranzakció is lehet
 
+![blokk séma](https://miro.medium.com/max/688/1*mqk4wCjPpvuopJR1ul5-_w.png)
 
+Az egész blokkot egybe hasheljük, `sha256`-tal aminek értékét a következő blokk fejlécébée tesz. A tranzakciók alapja a genezis block mai hard kódolva van a kliensekbe. Az első blokktól való távolság a block height.
 
+### merkle tree
+> bináris, párosssával hashelte fa
+> - https://www.investopedia.com/terms/m/merkle-tree.asp
+> - https://www.tutorialspoint.com/blockchain/blockchain_merkle_tree.htm
+> 
+> 
+> Tranzakció párokat hashelünk össze, és páronként keletkezik egy-egy `sha256` hash érték, ezeket a hash értékéket szintén páronként hasheljük, egészen addig amíg egy gyökeret kapunk. Ez a route hash érték, ami a block headewrben van benne, amit a teljes blokk értékével elhashelünk.
+> 
+> ![merkel tree](https://www.tutorialspoint.com/blockchain/images/merkle_tree.jpg)
+> 
+> Ezek után, hogy egy `T4` tranzakció benne van a blockchainben, akkor a párjának a tranzakcióját, a pár hash párjának az rétékét és a közös gyerekük hash értékének a párját kell megadnunk. Ez egy `O(log n)` műveletígényű algoritmus.
+> 
+> ![blokklánc](https://www.tutorialspoint.com/blockchain/images/root_hash.jpg)
+> 
+>
+> *Block felépítése:*
+>
+> | Size         | Field         | Description  |
+> | ------------ |:-------------:| ------------:|
+> | 4 bytes      | Block Size |The size of the block, in bytes, following this field|
+> | 80 bytes     | Block Header      |  Several fields form the block header |
+> | 1-9 bytes (VarInt) | Transaction Counter     |    How many transactions follow |
+> | Variable | Transactions     |    The transactions recorded in this block |
+> 
+> Ez az egész a P2P hálózaton minden peerhez lemásolódik! Ettől pseudonym rendszer.
+> 
+> bővebben: [Mastering Bitcoin](https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch07.html#:~:text=Structure%20of%20a%20Block&text=The%20block%20is%20made%20of,contains%20more%20than%20500%20transactions.)
 
+### Bányászás
+Bitcoin monetáris politikája: hány darab bitcoin van forgásban és hosszútávon hány bitcoin kerül be a rendszerbe. Ez az algoritmusban hard kódolva rögzítve van.
 
+![bitcoin monetáris alakulása](https://static.coindesk.com/wp-content/uploads/2020/03/bitcoin-supply-and-subsidy.png)
 
+- éves szintén lesz egyre kevesebb bitcoin, majd 2040 körül beáll a rendszer egyensúlyba, amiben a **max érték 21 000 000 BTC**
+- minden tranzakció alapja a `coinbase` tranzakció, ez minden tranzakcióban van, azaz minden egyes blokk első tranzakciója maga az, hogy hány btc-t állít elő. Átlag 10 percenként alakul ki egy blokk jelenleg, 10 000 tranzakcinónként alakul, hogy hány btc kerül ki a tranzakcióból. A legelején 50 BTC került ki, de 210 000 blokkonként ez feleződik, így annál keesebb ekrül ki belőle. A bányász az újonnan megkreált BTC-t + a tranzakciós díjak összegét is ezen a `coinbase` tranzakción keresztül kapja meg. 2140-től nem lesz több coin, ezért a bányászok már csak a tranzakciós díjakkal lesznek jutalmazva.
+- A bitcoin-t elégetni úgy lehet, hogy titkos kulcs nélküli címre megy a tranzakció. A titkos kulcs el is veszhet, vagy akár sosem létezett.
+- egy csomópont számítási kapacitása határozza meg, hogy mennyi esélye van megnyerni valakinek a játékot, az növeli az esélyeit, de attól még véletlenszerű marad a döntés, hogy melyik bányász lesz kiválasztva a blokk bányászásáért járó jutalomért, ami a genezis blokk által ígért jutalom coin értéke és a blokk tranzakcióinak tranzakciódíjainak összege.
 
-
-
-
-
+**cryptográfiai játék**
+- a blokk nonce értékéből sé a blokk sha 256-os hash értékénél kisebb számot kell megadnunk. A bizonyos szám, a nehézség maga. Ezek szerint a `nonce` paramétert a blokk hash ével összehashelve ennél a nehézségnél kisebb értéket kell megadnnunk. Ezt lehet tetszőleges nehézséggel megadni, mert a `bizonyos szám` az szabadon megadható.
+- a `nehézség` igazából a hash érték legelején lévő számjegyeket adja meg.
+![nehézség](https://cryptographics.info/wp-content/uploads/2018/01/resized/1224/0/65/0/0/0/Proof-of-Work.png?1616162655363)
 
 
 
