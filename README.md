@@ -474,5 +474,61 @@ ha nem kompatbilis módon updatelünk akkor két külön hálózat keletkezik, a
 
 ![bitcoin forkok](https://i.redd.it/1pvmr98w5x041.png)
 
+## EA 7 - ethereium
+https://ethereum.org/hu/
 
+> Ethereumot üzleti logikákra találták ki. Biztonság szemponjából rosszabb mint a bitcoin. 2013-ban Vitalik Buterin alkotta. Az alap elv, hogy minnél több, különböző coin/token/platformnak tudjon alapot adni. Ez úgy néz ki, hogy az ether az alap token, vagy külső token van rámappelve az etherre, vagy fordítva. Ezzel szemben, pl a privacy coinoknál *(pl: monero, zcash)* tlejesen saját minden, a coin, a token, az algoritmus.
+> 
+> *pl:*
+> 
+> - litecoin - saját blockchain, saját crypto
+> - BCH - saját blockchain, saját crypto
+> - nightfall - ETH fölött próbál privacyt növelni
+> 
+> - egy konstans kulcs generál egy címet, vagy mauálisan hoz létre, de nincs minden tranzakció mögé új kulcs rendelve.
+> - teljesítménye jobb mint a bitcoiné
+> - proof of stake a bányászoknak fix juttatást ad, de a bányászok letétet tesznek ezért
+> - stablabb kriptoközgazdaság, minden amit a btc tud azt átvették, de még az eth alapú tokeneket is meg lehet valósítani ezért komplexebb
+> - kiterjesztett programozási nyelv, ohgy saját smart contractot vagy saját coint is írjunk akár
+> - EVM: Ethereum Virtual Machine - Truing tlejes nyelv, ciklussal, mindennel
 
+### Blokk felépítése
+```
+Header
+--------
+tranzakciók fája
+---------
+state
+v1 változó - e1 érék
+v2 változó - e2 érték
+...        - ....
+```
+A `state` változóknál bármi lehet áltozó, lehet az is, hogy a számlán változik az érték, vagy akár az is, hogy mondjuk x hallgató felveszi y tárgyat. Logikailag minden blokkláncban korábbi state változó benne van a blokkban. A korábbi blokklánc állapotok a `world state`-ben vannak tárolva.
+
+![state válátozás ethereumon](https://www.anyblockanalytics.com/wp-content/uploads/2019/11/Iniciate-a-new-block-header-on-the-blockchain.png)
+
+A tranzakciók gyakorlatilag ezeknek a változóknak az állapotváltozásaival valósulnak meg. A válzotók maguk a címek lehetnek. Ez a teljes változás a teljes P2P hálózaton tükrözve van.
+
+![eth tranzkció](https://coingeek.com/wp-content/uploads/2020/10/transaction.jpg)
+
+**A smart contract Wei-ben számol, azt konvertálja ETH-ba!**
+
+![konvetálás](https://i.stack.imgur.com/EnoDw.png)
+
+### Monetáris politika
+> Folyamatos 5% inflációval kezdték, azóta lement 3%-ra, ezt beépítve változtathatják minden hard forknál. Mivel itt a smart programozás mögé teszi csak jutalomként az ETH-t ezért a valódi érték nem az ETH hanem az amit képvisel mögötte.
+> 
+> ![btc vs eth](https://image.slidesharecdn.com/etclondonevent-161214091442/95/ethereum-classic-and-crypto-monetary-policy-london-event-13-638.jpg?cb=1481706920)
+> 
+> ![két fél account](https://miro.medium.com/max/2632/1*59oJIrRDZeOXu8CY_MvEtw.png) 
+> A `smart contract account`önmagában semmit nem tud csinálni, de a walletben tárolt `externally owned account` tud indítani tranzakciókat a smart contractból, mivel csak ott vannak titkos kulcsok, de ETH tároláson kívűl semmit nem tud tárolni, tehát minden tranzakció egy `externally owned account`ból kell induljon! 
+
+### EVM - Ethereum Virtual Machine
+> minen ami smart contract az egy ilyen művelet.
+> 
+![stackmachine](https://miro.medium.com/max/2048/0*BI4W4KXgTHgbCVRm.png)
+
+Elterjedt programozási nyelvek amelyeket átfordít a compiler az [Ethereum yellow paper](https://ethereum.github.io/yellowpaper/paper.pdf)ben bemutatott utasításkészletre:
+- Solidity
+- Serpent
+- Vyper
