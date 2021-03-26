@@ -481,10 +481,12 @@ https://ethereum.org/hu/
 > 
 > *pl:*
 > 
-> - litecoin - saját blockchain, saját crypto
-> - BCH - saját blockchain, saját crypto
-> - nightfall - ETH fölött próbál privacyt növelni
+> - *litecoin - saját blockchain, saját crypto*
+> - *BCH - saját blockchain, saját crypto*
+> - *nightfall - ETH fölött próbál privacyt növelni*
 > 
+> ----
+> **Rövden:**
 > - egy konstans kulcs generál egy címet, vagy mauálisan hoz létre, de nincs minden tranzakció mögé új kulcs rendelve.
 > - teljesítménye jobb mint a bitcoiné
 > - proof of stake a bányászoknak fix juttatást ad, de a bányászok letétet tesznek ezért
@@ -527,8 +529,44 @@ A tranzakciók gyakorlatilag ezeknek a változóknak az állapotváltozásaival 
 > minen ami smart contract az egy ilyen művelet.
 > 
 ![stackmachine](https://miro.medium.com/max/2048/0*BI4W4KXgTHgbCVRm.png)
+https://medium.com/@fabrisde167/getting-deep-into-evm-how-ethereum-works-backstage-ea70203e3124
 
-Elterjedt programozási nyelvek amelyeket átfordít a compiler az [Ethereum yellow paper](https://ethereum.github.io/yellowpaper/paper.pdf)ben bemutatott utasításkészletre:
+Elterjedt programozási nyelvek amelyeket átfordít a compiler az [Ethereum yellow paper](https://ethereum.github.io/yellowpaper/paper.pdf)ben bemutatott utasításkészletre, az EVM-re:
 - Solidity
 - Serpent
 - Vyper
+
+## Programozás
+https://remix.ethereum.org/
+
+Program felépítése: `pragma solidity ^0.6.6;` a kezdete ahol a compiler minimális verziószámát adja meg.
+
+*Smart contract*ot `contract` kulcsszóval kezdünk, a contract neve nem ajánlott, hogy a fájl neve legyen!
+```Solidity
+contract contractnév {
+
+}
+```
+
+Változók definiálása és deklarálása: `változó_típusa változó_láthatósága változó_neve` fomrában, *pl:*`uint public hanyhallgatovan;`. Ehhez adhatunk konstruktor:
+```Solidity
+    constructor() public {
+        hanyhallgatovan = 20;    
+    }
+```
+
+függvények, tranzakciók, a szokásos módon működnek:
+```Solidity
+    function ujBeiratkozas() public{
+        hanyhallgatovan = hanyhallgatovan + 1;
+    }
+```
+
+**DEPLOY & RUN TRANSACTIONS**:
+- javascript VM - a szimulált js gépen fut, ahol random accountocat használunk tesztelésre
+- injected web3 - metmask használtával
+- web3 provider - saját csomópont használatával
+
+**Figyelem a program telepítésének a a hálózatra költsége van, mert egy tranzakciónak számít!**
+
+fájl: [oktatasadminisztacio.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/oktatasadminisztacio.sol)
