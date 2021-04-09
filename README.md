@@ -574,8 +574,118 @@ fájl: [oktatasadminisztacio.sol](https://github.com/gabboraron/bevezetes_a_blok
 ## EA 8 - solidity alapok
 **Kevés kódot, de azt átgondoltan írjunk!**
 
+doksi: https://docs.soliditylang.org/en/v0.6.6/types.html
+
 Ami `public` az hívható meg másik smart contractból, ami `prvate` az nem, amihhez nem rendelünk láthatóságot az nem hjvható, de látszik a láncon.
 
 Még több privacyt adó módszer: [Ethereum nightfall](https://github.com/EYBlockchain/nightfall)
 
 ![solidity típusok](https://camo.githubusercontent.com/6a37456843fa6d90616947e04dad210414d473e9df17b5403aa7c67521a08fe7/68747470733a2f2f692e696d6775722e636f6d2f325033586551522e706e67)
+
+> Javascript VM-et használunk a teszteléshez!
+>
+> Ha `incejted web3`-at használunk akkor a metamaskkal telepíti ki,  akár ropsteinre akár élesbe.
+ 
+file: [oktatas.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/oktatas.sol)
+```Solidity
+pragma solidity ^0.6.6;
+
+contract Oktatas{
+    
+    
+    enum OktatasTipusa { //ezek számok a háttérben
+        Tantermi, 
+        Online,
+        Hibrid
+    }
+    
+    //properties
+    
+    //atomic types
+    bool public isActiveOktatas;
+    int8 public szekekszama;
+    uint8 public csakpozitivSzekekSzama;
+    uint public hallgatokSzama;
+    
+    
+    //complex types
+    string public tantargyNeve; //byte string
+    address public owner = address(0xd24c2A01431dCFb85a8CDED4693D5CDCE373bde0); //20 bájtos ethereum cím
+    address public targyadminisztrator;
+    OktatasTipusa public tipus;
+    uint[] public diakigazolvanyID;
+    
+    function getDiakIgazolvanyId(uint _hanyadik) public view returns (uint)
+    {
+        return diakigazolvanyID[_hanyadik];
+    }
+    
+    //functions (read/tranzaction)
+    //transaction
+    constructor() public{
+        isActiveOktatas = true;
+        szekekszama = -10;
+        csakpozitivSzekekSzama = 10;
+        hallgatokSzama = 24;
+        tantargyNeve = "Blockchain programozas";
+        targyadminisztrator = msg.sender; //az a cím ami az egészet elkezdte
+        tipus = OktatasTipusa.Online;
+        
+        diakigazolvanyID.push(111);
+        diakigazolvanyID.push(222);
+        diakigazolvanyID.push(333);
+    }
+    
+    function sumDiakigazolvanyId() public view returns (uint)
+    {
+        uint sum = 0;
+        for(uint i = 0; i<diakigazolvanyID.length; i++)
+        {
+            sum += diakigazolvanyID[i];
+        }
+        return sum;
+    }
+    
+    function setOktatasTipus(OktatasTipusa _ujjtipus) public {
+        tipus = _ujjtipus;
+    }
+    
+    function setToTantermi() public
+    {
+        tipus = OktatasTipusa.Tantermi;
+    }
+    
+    function changeTargyNev(string calldata _ujNev) public //calldata -> paraméterátadás
+    {
+        string memory megUjNev = "Halado Blockchain";
+        tantargyNeve = megUjNev;
+    }
+    
+    function beiratas(uint _hanyhallgatoLegyen) public
+    {
+        if(_hanyhallgatoLegyen < 5){
+            uint belsoValtozo = _hanyhallgatoLegyen + 1;
+            hallgatokSzama += belsoValtozo;
+        }
+    }
+    
+    //read functions - amikor csak olvasunk a  láncról, ezek gyorsabbak, kisebb költségűek
+    //ha ublic másik smart contractból is lekérhető
+    function hallgatokSzekekEsTablakSzama(uint _tabla) public view returns (uint _azOsszeg, uint _tablaMegEgy)
+    {
+        //return _tabla + csakpozitivSzekekSzama + hallgatokSzama;
+        _tabla + csakpozitivSzekekSzama + hallgatokSzama;
+        _tablaMegEgy = _tabla + 1;
+    }
+    
+}
+```
+
+### Miért nem használunk ciklusokat/tömböket/feltételeket/elágazásokat?
+Blokk mérete bitcoinban a csomag mérete, ethereumban a futási idő, azaz az assembly kódokhoz tartozó gáz árak összessége, ami alapján jól látszik, hogy minden amivel a blokkláncra írunk drága, amivel csak műveletet végzünk, memóriában olcsó. A teljes gáz árnak van egy felső limit ára. Épp ezért inkább több külön tranzakciót intézünk amikre hivatkozunk. A tranzakciókhoz rendelünk egy gázlimitet ami azt jeenti, hogy a függvény maximum annyi értékben fogyaszt gázt, ha átlépné akkor a tranzakció bekerül a blokkláncba, de a változása nem! Ez a `Gas limit`. Az aktuális gáz árakat az [ethereum gas station](https://ethgasstation.info/)ön nézhetjük meg.
+
+
+
+
+
+
