@@ -570,3 +570,12 @@ függvények, tranzakciók, a szokásos módon működnek:
 **Figyelem a program telepítésének a a hálózatra költsége van, mert egy tranzakciónak számít!**
 
 fájl: [oktatasadminisztacio.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/oktatasadminisztacio.sol)
+
+## EA 8 - solidity alapok
+**Kevés kódot, de azt átgondoltan írjunk!**
+
+Ami `public` az hívható meg másik smart contractból, ami `prvate` az nem, amihhez nem rendelünk láthatóságot az nem hjvható, de látszik a láncon.
+
+Még több privacyt adó módszer: [Ethereum nightfall](https://github.com/EYBlockchain/nightfall)
+
+![solidity típusok](https://camo.githubusercontent.com/6a37456843fa6d90616947e04dad210414d473e9df17b5403aa7c67521a08fe7/68747470733a2f2f692e696d6775722e636f6d2f325033586551522e706e67)
