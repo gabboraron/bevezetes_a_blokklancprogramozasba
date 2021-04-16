@@ -8,6 +8,7 @@
 **Ajánlott irodalom:**
 - Bitcoin Standard - A központi bankok decentralizált alternatívája - Saifedean Ammous
 
+[Szegő Dániel](https://github.com/Daniel-Szego/oktatas)
 
 ## Vizsgakérdések:
 - [smart contract]()
@@ -684,8 +685,199 @@ contract Oktatas{
 ### Miért nem használunk ciklusokat/tömböket/feltételeket/elágazásokat?
 Blokk mérete bitcoinban a csomag mérete, ethereumban a futási idő, azaz az assembly kódokhoz tartozó gáz árak összessége, ami alapján jól látszik, hogy minden amivel a blokkláncra írunk drága, amivel csak műveletet végzünk, memóriában olcsó. A teljes gáz árnak van egy felső limit ára. Épp ezért inkább több külön tranzakciót intézünk amikre hivatkozunk. A tranzakciókhoz rendelünk egy gázlimitet ami azt jeenti, hogy a függvény maximum annyi értékben fogyaszt gázt, ha átlépné akkor a tranzakció bekerül a blokkláncba, de a változása nem! Ez a `Gas limit`. Az aktuális gáz árakat az [ethereum gas station](https://ethgasstation.info/)ön nézhetjük meg.
 
+## EA 9
+> ### Nagybeadandó
+> 1. feladat leírása, Use-Casek, stb
+>   - bejelnetkezés
+>   - a rendszer authentikáció
+>   - üzleti logika ~ smart contract <- elég egy kisebb 2/3 smart contractos megoldás
+>   - eredmény
+> 2.  smart contract és `gas` analízis minden tranzakcióra (`transaction cost` vagy `execution cost`) és arra költségsázmolás: https://ethgasstation.info/calculatorTxV.php.
+> 3. UI/auto teszt
 
+### Személyes adatok a blokkláncon
+> A a szmeélyes adatok küldése a blokkláncon GDPR értlemében tiltott, a büntetéést az kapja aki kiküldi, nem a blokklánc tervezője.
 
+### `GAS` limit
+>  Ha beállítunk egy gas limitet akkor ha az alatt van a program akkor szépen lefut, ha viszont a fölött akkor `Out of cas exception` errort kapunk. 
+>
+> Ez azért fontos, mert a program telepítésekor ezt a gas árat ki kell fizetnünk.
+> - **Ha nem fut le a tranzakció akkor `gaslimit` árat fizetünk!
+> - **Ha lefut akkor `gas*price` árat fizetünk!**
+> - **Ha hibát dob *és* befér a `gasliit`-be a tranzakció akkor `gaslimit*price` árat fizetünk!**
+> 
+> Továbbá bányászatkor egy blokkba maximum 12 milliós össz `gas` ár fér bele.
 
+### tranzakció hibakezelése:
+- Előfeltételnél: `require(feltetel>teljesül, "Hibaüzenet");` Ez azért jó, mert így csak annyi `gas` fogyott amennyi addig lefutott!
+- utasításoknál: `if(feltetel == teljesül){revert("Hibaüzenet");}` Csak annyit fizetsz amennyit futott.
+- utófeltételkezelés: `assert(allapot < hibahatar);` Ha nem teljesül akkor szintén a tlejes árat fiztjük.
 
+### Függvény módosító
+Azért hasznos mert a függvény módosító egy feltétel gyűjtemény lehet, amit minden azonos feltételhez kötött függvény elé beilleszthetünk.
 
+```Solidity
+modifier hallgatokSzama(uint _hallgatokSzama){
+  require ( _hallgatokSzama > 1, "hiba");
+  require ( _hallgatokSzama < 10, "hiba");
+  
+  if( _hallgatokSzama == 5){
+    revert("error");
+  }
+}
+
+function beiratkozas (uint  _hallgatokSzama) public Hallgatokszama( _hallgatokSzama){
+  szekek szama += 1;
+  //stb kód
+}
+```
+
+### Eseményfigyelő
+A blokklánc eseményeire figyelhetünk, azokra hallgathatunk, vagy feliratkozhatunk a blokkánc változására.
+```Solidity
+event BEIRATKOZAS(uint _hanyHallgatoIratkozottBe);
+
+function beiratas (uint _hanyujhallgato) public returns (uint){
+  emit BEIRATKOZAS(_hanyujhallgato + 1);
+  //kód többi része
+}
+```
+
+Blokk szerkezete:
+```
+HEADER
+------
+STATE
+-----
+Logs
+```
+Az `eventek` a `Logs` részen vannak tárolva.
+
+Ha a blokkláncon kiváltott eseményre szeretnénk figyleni akkor elég egy teljes peert monitorizálni és akkor onnan lekérhetünk minden tranzakciót, amit a wallet **(!)** fog monitorizálni, helyben!
+
+### Több argumentumú egymást hívó függvények
+```Solidity
+pragma solidity ^0.6.6;
+
+contract Oktatasadmin{
+    mapping (address => uint) pontok;
+    
+    
+    address AzAdminisztrator; //a futtató account címe
+    
+    constructor () public {
+        AzAdminisztrator   = msg.sender;
+        pontok[msg.sender] = 100;
+    }
+    
+    function HanyPontjaVan(address _valaki) public view returns(uint){
+        return pontok[_valaki];
+    }
+    
+    function PontokKiosztas(address _valaki, uint _hanypontotadunk) public {
+        pontok[_valaki] +=_hanypontotadunk;
+    }
+    
+    function PontBEallitas(address _valaki, uint _hanypontotallitunkbe) public {
+        pontok[_valaki] = _hanypontotallitunkbe;
+    }
+}
+```
+
+Ha le szeretnénk védeni, hogy adott függvényt csak egy adott címről lehessen meghívni:
+```Solidity
+function PontokKiosztas(address _valaki, uint _hanypontotadunk) public {
+    require(msg.sender == AzAdminisztrator, "nem admin hívta!");
+    pontok[_valaki] +=_hanypontotadunk;
+}
+```
+
+### Struktúra példa
+```Solidity
+    enum PontTipus{
+        alma,
+        korte,
+        szilva
+    }
+    
+    struct PontStruktura{
+        PontTipus pontTipus;
+        uint hanyPont;
+        uint ervenyesseg;
+    }
+    
+    mapping(address => PontStruktura) public pontok;
+    
+    
+    address AzAdminisztrator; //a futtató account címe
+    
+    constructor () public {
+        AzAdminisztrator   = msg.sender;
+        //pontok[msg.sender] = 100;
+        PontStruktura memory struktura = PontStruktura(PontTipus.alma, 100, 10);
+        pontok[msg.sender] = struktura;
+    }
+    
+    function HanyPontjaVan(address _valaki) public view returns(PontTipus tipus, uint hany, uint erv){
+        tipus = pontok[_valaki].pontTipus;
+        hany  = pontok[_valaki].hanyPont;
+        erv   = pontok[_valaki].ervenyesseg;
+        //return pontok[_valaki];
+    }
+```
+
+fájl: [oktatasadmin.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/oktatasadmin.sol)
+```Solidity
+pragma solidity ^0.6.6;
+
+contract Oktatasadmin{
+    //mapping (address => uint) pontok;
+    
+    enum PontTipus{
+        alma,
+        korte,
+        szilva
+    }
+    
+    struct PontStruktura{
+        PontTipus pontTipus;
+        uint hanyPont;
+        uint ervenyesseg;
+    }
+    
+    mapping(address => PontStruktura) public pontok;
+    
+    
+    address AzAdminisztrator; //a futtató account címe
+    
+    constructor () public {
+        AzAdminisztrator   = msg.sender;
+        //pontok[msg.sender] = 100;
+        PontStruktura memory struktura = PontStruktura(PontTipus.alma, 100, 10);
+        pontok[msg.sender] = struktura;
+    }
+    
+    function HanyPontjaVan(address _valaki) public view returns(PontTipus tipus, uint hany, uint erv){
+        tipus = pontok[_valaki].pontTipus;
+        hany  = pontok[_valaki].hanyPont;
+        erv   = pontok[_valaki].ervenyesseg;
+        //return pontok[_valaki];
+    }
+    
+    function PontokKiosztas(address _valaki, uint _hanypontotadunk) public {
+        require(msg.sender == AzAdminisztrator, "nem admin hívta!");
+        //pontok[_valaki] +=_hanypontotadunk;
+    }
+    
+    function PontBEallitas(address _valaki, uint _hanypontotallitunkbe) public {
+        //pontok[_valaki] = _hanypontotallitunkbe;
+    }
+    
+    function PontKuldes(address _from, address _to, uint mennyi) public {
+        //require(pontok[_from]> mennyi, "nincs elég a küldéshez");
+        require(msg.sender == _from, "nem a sajat szamlarol indít");
+        //pontok[_from] -= mennyi;
+        //pontok[_to] += mennyi;
+    }
+}
+```
