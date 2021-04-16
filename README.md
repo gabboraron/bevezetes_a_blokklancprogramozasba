@@ -432,6 +432,8 @@ Bitcoin monetáris politikája: hány darab bitcoin van forgásban és hosszút�
 
 ![bitcoin monetáris alakulása](https://static.coindesk.com/wp-content/uploads/2020/03/bitcoin-supply-and-subsidy.png)
 
+Bányászás úgy hogy legyen mögötte tartalmi számítás nehéz pl: https://ipfs.io/ 
+
 - éves szintén lesz egyre kevesebb bitcoin, majd 2040 körül beáll a rendszer egyensúlyba, amiben a **max érték 21 000 000 BTC**
 - minden tranzakció alapja a `coinbase` tranzakció, ez minden tranzakcióban van, azaz minden egyes blokk első tranzakciója maga az, hogy hány btc-t állít elő. Átlag 10 percenként alakul ki egy blokk jelenleg, 10 000 tranzakcinónként alakul, hogy hány btc kerül ki a tranzakcióból. A legelején 50 BTC került ki, de 210 000 blokkonként ez feleződik, így annál keesebb ekrül ki belőle. A bányász az újonnan megkreált BTC-t + a tranzakciós díjak összegét is ezen a `coinbase` tranzakción keresztül kapja meg. 2140-től nem lesz több coin, ezért a bányászok már csak a tranzakciós díjakkal lesznek jutalmazva.
 - A bitcoin-t elégetni úgy lehet, hogy titkos kulcs nélküli címre megy a tranzakció. A titkos kulcs el is veszhet, vagy akár sosem létezett.
