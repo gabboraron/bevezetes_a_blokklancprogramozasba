@@ -8,7 +8,7 @@
 **Ajánlott irodalom:**
 - Bitcoin Standard - A központi bankok decentralizált alternatívája - Saifedean Ammous
 
-[Szegő Dániel](https://github.com/Daniel-Szego/oktatas)
+[Szegő Dániel](https://github.com/Daniel-Szego/oktatas): [https://prezi.com/user/wdglrrpdnrkl](https://prezi.com/user/wdglrrpdnrkl)
 
 ## Vizsgakérdések:
 - [smart contract]()
