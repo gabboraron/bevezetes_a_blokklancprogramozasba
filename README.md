@@ -76,7 +76,7 @@
 - **2018** nagy kriptovaluta válság
 
 #### HF:
-Válassz egy eseményt a bitcoin/blokkánc történetéből és mutasd be 10 sorban. Mi történt, miért izgalmas ez, hogyan befolyásolta a blokklánc adaptációt. 
+Válassz egy eseményt a bitcoin/blokkánc történetéből és mutasd be 10 sorban. Mi történt, miért izgalmas ez, hogyan befolyásolta a blokklánc adaptációt. fájl: [kis beadandók/cro_tortenete.pdf](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/kis%20beadand%C3%B3k/cro_tortenete.pdf)
 
 ## EA2
 ### a tranzakció menete:
@@ -98,7 +98,7 @@ Válassz egy eseményt a bitcoin/blokkánc történetéből és mutasd be 10 sor
 > A tranzakció programozási nyelev nem egy triviális kérdés, mert ha turing teljes a nyelv akkor végtleen ciklus is lehet benne ami pl egy IOU rendszerben kiszámíthatatlan végeredményt ad.
 
 #### HF: 
-egy egyetem blokkláncosításának alapelvei a fentiek alapján.
+Egy egyetem blokkláncosításának alapelvei a fentiek alapján. fájl: [kis beadandók/blokklanc_az_oktatasban.pdf](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/commit/ecf1006109ecb8deb7f13a46435799b9f28f3893)
 
 #### tranzakciós struktúra
 ![blokklánc](https://miro.medium.com/max/1452/1*Wc-YRBsmZcjNsMBSqyYtuA.png)
