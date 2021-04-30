@@ -883,3 +883,182 @@ contract Oktatasadmin{
     }
 }
 ```
+
+
+## EA 10 
+### saját ERC20 token
+Ethereum alapú saját tokenhez a dokumentááció: https://eips.ethereum.org/EIPS/eip-20
+
+fájl: [token.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/token.sol)
+```Solidity
+pragma solidity ^0.6.6;
+
+contract oktatasToken {
+    string private _name;
+    string private _symbol;
+    uint8 private _decimals;
+    uint256 private _suply;
+    
+    //mindneki token balanceja
+    mapping(address => uint256) _balance;
+    
+    
+    constructor(string memory name, string memory symbol, uint8 decimals, uint256 supply) public {
+        _name = name;
+        _symbol = symbol;
+        _decimals = decimals;
+        _suply = supply;
+        _balance[msg.sender] = supply;
+    }
+    
+    function name() public view returns (string memory){
+        return _name;
+    }
+    
+    function symbol() public view returns (string memory){
+        return _symbol;
+    }
+    
+    function decimals() public view returns (uint8){
+        return _decimals;
+    }
+    
+    function totalSuply() public view returns (uint256){
+        return _suply;
+    }
+    
+    function balanceOf(address owner) public view returns (uint256 balance){
+        return _balance[owner];
+    }
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);    
+    event TransferFrom(address indexed _from, address indexed _to, uint256 _value);    
+    
+    function transfer(address _to, uint256 _value) public returns (bool success){
+        require ();
+        _balance[msg.sender] = _balance[msg.sender] - _value;
+        _balance[_to] = _balance[_to] + _value;
+        
+        emit Transfer(msg.sender, _to, _value);    
+        
+        return true;
+    }
+}
+```
+> kitelepítéskor meg kell adni a nevét a jelét a tezedesek sázmát (nem fontos) és a kezdőéértéket: `"okatastoken","OKT",2,2200`. **!! Mindig nagyon figyeljünk, hogy megfelelő számú paramétert adjunk be !!**
+
+Mivel ez az egész ethereum fölött van, ezért minden teranzakciót ETH-ban fizetünk.
+Például létrehozzuk az oktatás tokent: https://ropsten.etherscan.io/token/0x24fbee283e79ba85addc322365b87e41e510d7e7 
+
+ERC721-es token doksi: https://medium.com/quiknode/erc-721-token-ea80c7195102
+
+Ha élesben használnánk valami hasonlót akkor külső libeket érdemes használni, pl: https://openzeppelin.com/ hogy security hibákat megússzunk.
+
+Legfrissebb enterprise ready önálló blockchain a [Cardano](https://coinmarketcap.com/currencies/cardano/) volt, 2017-ben indut, és jelneleg indul élesben. VAgy [Tezos](https://coinmarketcap.com/currencies/tezos/)
+
+### öröklődés
+
+Az előzőekből öröklődve:
+```Solidity
+pragma solidity ^0.6.6;
+
+contract oktatasToken {
+    string   _name;
+    string   _symbol;
+    uint8    _decimals;
+    uint256  _suply;
+    
+    //mindneki token balanceja
+    mapping(address => uint256) _balance;
+    
+    
+    constructor(string memory name, string memory symbol, uint8 decimals, uint256 supply) public {
+        _name = name;
+        _symbol = symbol;
+        _decimals = decimals;
+        _suply = supply;
+        _balance[msg.sender] = supply;
+    }
+    
+    function name() public view returns (string memory){
+        return _name;
+    }
+    
+    function symbol() public view returns (string memory){
+        return _symbol;
+    }
+    
+    function decimals() public view returns (uint8){
+        return _decimals;
+    }
+    
+    function totalSuply() public view returns (uint256){
+        return _suply;
+    }
+    
+    function balanceOf(address owner) public view returns (uint256 balance){
+        return _balance[owner];
+    }
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);    
+    event TransferFrom(address indexed _from, address indexed _to, uint256 _value);    
+    
+    function transfer(address _to, uint256 _value) public returns (bool success){
+        //require();
+        _balance[msg.sender] = _balance[msg.sender] - _value;
+        _balance[_to] = _balance[_to] + _value;
+        
+        emit Transfer(msg.sender, _to, _value);    
+        
+        return true;
+    }
+}
+
+contract coloredOktatasToken is oktatasToken{
+    
+    enum Color{
+        kek,
+        Piros,
+        Sarga
+    }
+    
+    Color public color;
+        
+    constructor(string memory name, string memory symbol, uint8 decimals, uint256 supply) oktatasToken(name, symbol, decimals, supply) public {
+        color = Color.kek;
+    }
+    
+    function mint(address _toMint, uint256 _amountToMint) public {
+        //ellenorzes is kell, h ki mintelhet!
+        
+        _balance[_toMint] += _amountToMint;
+        _suply += _amountToMint;
+    }
+
+      
+    function burn(address _toMint, uint256 _amountToMint) public {
+        //ellenorzes is kell, h ki mintelhet!
+        
+        _balance[_toMint] -= _amountToMint;
+        _suply -= _amountToMint;
+    }   
+}
+```
+
+Küldhetünk ETH-t smart contractnak, tehát tokennek is!
+```Solidity
+    fallback() external payable {
+        
+    }
+    
+    function sendEther() public payable {} // ez kezeli automatikusan az ETH tranzakciókat, ha pl küldünk ETH-t a tokennek akkor itt vonódik le.
+    
+    function getEther() public view returns(uint256){
+        return address(this).balance;
+    }
+    
+    function payback(address payable _to, uint256 _amount) public {
+        _to.transfer(_amount);
+    }
+```
+teljes példa: [token-eth_utalhato_Egyben.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/token-eth_utalhato_Egyben.sol) 
