@@ -1062,3 +1062,54 @@ Küldhetünk ETH-t smart contractnak, tehát tokennek is!
     }
 ```
 teljes példa: [token-eth_utalhato_Egyben.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/token-eth_utalhato_Egyben.sol) 
+
+## Más fejlesztői eszközök
+### [Truffle framework](https://www.trufflesuite.com/)
+- Solidity Etheriumra van kihegyezve, a fejelsztői ciklus támogatására remekül alklamas
+- `truffle init` - kezdeti projekt fájlstruktúrát hoz létre. Benne kész mappákkal és alap kódokkal.
+  - `contracts/`
+    - `migraations.sol` - init contract
+  - `migrations/`
+    - `initial_migrations.js` 
+  - `test/`
+    - `truffle-config.js` - itt van megadva milyen hálózatot használunk, és a truffle beállításai, amiben a compiler, stb van beállítva
+
+> Trufflel használható hálózatok: 
+> - testnetek: [Ropstein](https://ropsten.etherscan.io/), [Kovan](https://kovan.etherscan.io/), [RinkeBy](https://www.rinkeby.io/#stats)
+> - lokális blokklánc csomópont <- ilyent csinált a remix is mikor lokálisan böngészőben csináltunk hálózatot 
+
+- `truffle compile` - fordítás, ekkor `build/contracts/` mappába kerül be
+
+Ezután a blokkláncra való telepítését a Solitiy programunknak javascriptben végezhetjük el.
+
+![solidity-js-hálózat kapcsolat](https://miro.medium.com/max/440/1*T_YAqogYLteDZ_h6XSp0zg.png)
+
+A [Dapp](https://www.dapp.com) amit előállítunk az egy decentralizált applikáció:
+
+![dapp séma](https://www.devteam.space/wp-content/uploads/2018/07/What-is-a-DApp.jpg) ![dapp vs app](https://miro.medium.com/max/800/1*_H1_SGXAAnlz7NVLtDtTBg.jpeg)
+
+- `truffle develop` parancsal tudjuk létrehozni a deelopment serert
+- `migrate --reset` el resetelhetjük a teszt servert
+
+teszteléshez használhatunk [Mocha chai](https://itnext.io/how-to-make-tests-using-chai-and-mocha-e9db7d8d48bc)t.
+
+kód: https://github.com/gabboraron/testcode
+
+### [solidity - Visual studio extension](https://marketplace.visualstudio.com/items?itemName=JuanBlanco.solidity#:~:text=Solidity%20support%20for%20Visual%20Studio,Snippets&text=Code%20completion%20for%20all%20contracts,file%20and%20all%20referenced%20imports)
+
+### Teszt blockchain: [Ganache](https://www.trufflesuite.com/ganache)
+- GUIs
+- kitehetjük rá a teljes kódot amit megírtunk az előbb
+- tesztelhetjük, hogy az adott tranzakció mit ad, mennyibe kerül, stb
+- (keccak-256)[https://emn178.github.io/online-tools/keccak_256.html] hasht képezünk a signitureből
+
+### GUI a solidity programunk főlé
+![web3js on solidity](https://www.dappuniversity.com/web3-js-diagram.png)
+
+Legelterjedtebb a [web3.js](https://github.com/ethereum/wiki/wiki/JavaScript-API), egy tutorial: [Intro to Web3.js · Ethereum Blockchain Developer Crash Course](https://www.dappuniversity.com/articles/web3-js-intro)
+
+
+
+
+
+
