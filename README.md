@@ -1108,7 +1108,9 @@ kód: https://github.com/gabboraron/testcode
 
 Legelterjedtebb a [web3.js](https://github.com/ethereum/wiki/wiki/JavaScript-API), egy tutorial: [Intro to Web3.js · Ethereum Blockchain Developer Crash Course](https://www.dappuniversity.com/articles/web3-js-intro)
 
-
+# Nagybeadandó - szavazás
+- feladatleírás: https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/elso_merfoldko/nagybeadando-blokklanc_alapu_szavazas.pdf
+- kód: [szavazas.sol](https://github.com/gabboraron/bevezetes_a_blokklancprogramozasba/blob/main/szavazas.sol)
 
 
 
